@@ -3,6 +3,11 @@
 1. Run: npm install
 2. Run: npm run adonis serve --dev
 
+NOTE: You may wanna install adonis on global. There are some weird cases where the local doesn't do as you need.
+
+# Other instructions
+1. Setup the Database and Seed: ```bash adonis  migration:run --seed```
+
 # Adonis fullstack application
 
 This is the fullstack boilerplate for AdonisJs, it comes pre-configured with.
