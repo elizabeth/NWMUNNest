@@ -34,6 +34,13 @@ class User extends Model {
   tokens () {
     return this.hasMany('App/Models/Token')
   }
+
+ /**
+  * A permission group.
+  */
+  permissions() {
+    return this.hasOne('App/Models/Permissions')
+  }
 }
 
 module.exports = User

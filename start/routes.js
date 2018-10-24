@@ -14,6 +14,9 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
-const Route = use('Route')
+const Route = use('Route');
 
-Route.on('/').render('welcome')
+Route.group(() => {
+  Route.get('permissions', 'PermissionController.index');
+  Route.post('permissions/create', 'PermissionController.create');
+}).prefix('api/v1');
