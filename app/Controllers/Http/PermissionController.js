@@ -8,7 +8,7 @@ class PermissionController {
   // Gets all of the permissions
   async index({response}) {
     const permissions = await Permission.all();
-    return response.json(permissions);
+    return response.status(200).json(permissions);
   }
 
   // Creates the Permissions
@@ -31,7 +31,7 @@ class PermissionController {
     // Saves
     await permission.save();
 
-    return response.status(201).json(permission);
+    return response.status(200).json(permission);
   }
 }
 
