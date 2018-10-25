@@ -34,7 +34,8 @@ class TicketController {
       });
     }
 
-    return response.status(200).json(ticket);
+    return response.status(200).json({
+      data: ticket});
   }
 
   async generate({request, response, auth}) {
@@ -120,10 +121,18 @@ class TicketController {
       });
     }
 
+    // Checks if the user is already checked in
+    if (ticket.checked_in) {
+      return response.status(400).json({
+        status: 'Error',
+        message: 'User already checked in.'
+      });
+    }
+
     try {
       // Sets ticket to checked in
       ticket.checked_in = true;
-      await ticket.status;
+      await ticket.save();
 
       // Returns the ticket
       return response.status(201).json({

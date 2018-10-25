@@ -48,7 +48,7 @@ class UserController {
       const token = await auth.attempt(authParameters.email, authParameters.password)
 
       return response.json({
-        token: token
+        data: token
       });
     } catch(error) {
       return response.status(400).json({
