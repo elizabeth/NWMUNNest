@@ -16,13 +16,21 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route');
 
+const apiPrefix = 'api/v1';
+
 Route.group(() => {
   Route.get('permissions', 'PermissionController.index');
   Route.post('permissions/create', 'PermissionController.create');
-}).prefix('api/v1');
+}).prefix(apiPrefix);
 
 Route.group(() => {
   Route.get('users', 'UserController.index');
   Route.post('users/register', 'UserController.register');
   Route.post('users/authenticate', 'UserController.authenticate');
-}).prefix('api/v1');
+}).prefix(apiPrefix);
+
+Route.group(() => {
+  Route.get('ticket', 'TicketController.get');
+  Route.post('ticket/generate', 'TicketController.generate');
+  Route.put('ticket/:id/checkin', 'TicketController.checkin');
+}).prefix(apiPrefix).middleware(['auth']);

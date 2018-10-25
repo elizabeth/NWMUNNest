@@ -16,7 +16,7 @@ class UserController {
     });
 
     if (validation.fails()) {
-      return response.status(409).send(validation.messages());
+      return response.status(400).send(validation.messages());
     }
 
     const user = new User();
