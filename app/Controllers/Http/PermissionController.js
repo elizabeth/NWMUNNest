@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const Permission = use('App/Models/Permission');
 const { validate } = use('Validator');
@@ -12,7 +12,7 @@ class PermissionController {
   }
 
   // Creates the Permissions
-  async create({request, response, auth}) {
+  async create({request, response}) {
 
     // Sets parameters for validation
     const validation = await validate(request.all(), {
@@ -35,4 +35,4 @@ class PermissionController {
   }
 }
 
-module.exports = PermissionController
+module.exports = PermissionController;
