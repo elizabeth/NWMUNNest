@@ -1,16 +1,24 @@
 'use strict'
 
-const User = use('App/Models/User');
-const { validate } = use('Validator');
-
 class UserController {
+
+  static get inject() {
+    return ['App/Models/User', 'Validator'];
+  }
+
+  constructor(User, Validator) {
+    this.User = User;
+    this.Validator = Validator;
+  }
+
+
   async index({response}) {
-    const users = await User.all();
+    const users = await this.User.all();
     return response.status(200).json(users);
   }
 
   async register({request, response, auth}) {
-    const validation = await validate(request.all(), {
+    const validation = await this.Validator.validate(request.all(), {
       email: 'required|unique:users',
       password: 'required'
     });
@@ -19,7 +27,7 @@ class UserController {
       return response.status(400).send(validation.messages());
     }
 
-    const user = new User();
+    const user = new this.User();
     user.email = request.input('email');
     user.password = request.input('password');
     user.permissions_id = 3;
