@@ -1,18 +1,50 @@
 'use strict'
 
-const User = use('App/Models/User');
-const Ticket = use('App/Models/Ticket');
+// Adonis/Node Dependencies
+const Mail = use('Mail');
 const Hash = use('Hash');
+const QRCode = use('qrcode');
 const { validate } = use('Validator');
 
+// Models
+const User = use('App/Models/User');
+const Ticket = use('App/Models/Ticket');
+
+// ES6 Private Methods
 const generateCode = Symbol('generateCode');
+const generateQR = Symbol('generateQR');
+const generateEmail = Symbol('generateEmail');
 
 class TicketController {
   // ES6 Symbolic Private Declaration
   async [generateCode]() {
     const currentDateTime = Math.round((new Date()).getTime() / 1000);
-    const hash = await Hash.make(currentDateTime.toString())
+    const hash = await Hash.make(currentDateTime.toString());
     return hash.toString();
+  }
+
+  async [generateQR](code) {
+      try {
+        return await QRCode.toDataURL(code);
+      } catch (err) {
+        console.error(err);
+        return null;
+      }
+  }
+
+  async [generateEmail](qr, email) {
+    try {
+      await Mail.send('emails.ticket', {}, (message) => {
+        message
+          .to(email)
+          .from('sg.seattle@nwmun.org')
+          .embed(qr, 'qrCode')
+          .subject('[NWMUN-Seattle 2018] Social Ticket')
+      })
+    } catch(err) {
+      console.log(err);
+      return null;
+    }
   }
 
   async get({request, response, auth}) {
@@ -50,21 +82,27 @@ class TicketController {
 
     const validation = await validate(request.all(), {
       quantity: 'required',
-      email: 'required'
+      email: 'required|unique:tickets'
     });
 
     if (validation.fails()) {
       return response.status(400).send(validation.messages());
     }
 
-    // Check if the code exists
+    // Generate Code and QR
     const code = await this[generateCode]();
-
-    // Checks if the user exists
     if (!code) {
       return response.status(500).json({
         status: 'Error',
         message: 'Code did not generate.'
+      });
+    }
+
+    const qr = await this[generateQR](code);
+    if (!qr) {
+      return response.status(500).json({
+        status: 'Error',
+        message: 'QR did not generate.'
       });
     }
 
@@ -85,6 +123,8 @@ class TicketController {
       ticket.quantity = request.input('quantity');
 
       await ticket.save();
+
+      await this[generateEmail](qr, request.input('email'));
 
       return response.status(200).json({
         message: 'Ticket created for: ' + request.input('email'),

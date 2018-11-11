@@ -5,11 +5,9 @@
 
 NOTE: You may wanna install adonis on global. There are some weird cases where the local doesn't do as you need.
 
-# To-Do:
-* Do we want to make it so a user can only be logged in once? Currently we're supporting multiple sessions.
-
 # Other instructions
 1. Setup the Database and Seed: ```bash adonis  migration:run --seed```
+2. Setup the `.env` file (see `.env.example` as an example)
 
 ---
 --- 

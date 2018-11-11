@@ -12,7 +12,7 @@ class Ticket extends Model {
     return false
   }
 
-  users() {
+  tickets() {
     return this.hasOne('App/Models/Ticket')
   }
 }
