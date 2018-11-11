@@ -5,7 +5,7 @@ const Model = use('Model');
 
 class Ticket extends Model {
   static get primaryKey () {
-    return 'user_id'
+    return 'code'
   }
 
   static get incrementing () {

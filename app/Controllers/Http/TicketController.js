@@ -17,20 +17,20 @@ class TicketController {
 
   async get({request, response, auth}) {
     // Checks if the user exists
-    const user = await User.find(auth.user.id);
-    if (!user) {
+    const code = request.input('code');
+    if (!code) {
       return response.status(400).json({
         status: 'Error',
-        message: 'User does not exist.'
+        message: 'Code does not exist.'
       });
     }
 
-    // Checks if the user has a ticket
-    const ticket = await Ticket.find(user.id);
+    // Checks if the code is associated with a ticket
+    const ticket = await Ticket.find(code);
     if (!ticket) {
       return response.status(400).json({
         status: 'Error',
-        message: 'User does not have a ticket.'
+        message: 'Code does not have a ticket.'
       });
     }
 
@@ -39,14 +39,6 @@ class TicketController {
   }
 
   async generate({request, response, auth}) {
-    const validation = await validate(request.all(), {
-      quantity: 'required'
-    });
-
-    if (validation.fails()) {
-      return response.status(400).send(validation.messages());
-    }
-
     // Checks if the user exists
     const user = await User.find(auth.user.id);
     if (!user) {
@@ -56,8 +48,28 @@ class TicketController {
       });
     }
 
+    const validation = await validate(request.all(), {
+      quantity: 'required',
+      email: 'required'
+    });
+
+    if (validation.fails()) {
+      return response.status(400).send(validation.messages());
+    }
+
+    // Check if the code exists
+    const code = await this[generateCode]();
+
+    // Checks if the user exists
+    if (!code) {
+      return response.status(500).json({
+        status: 'Error',
+        message: 'Code did not generate.'
+      });
+    }
+
     // Checks if the user has a ticket
-    if (await Ticket.find(user.id)) {
+    if (await Ticket.find(code)) {
       return response.status(400).json({
         status: 'Error',
         message: 'User already has a ticket.'
@@ -67,17 +79,19 @@ class TicketController {
     // Generates Ticket
     try {
       const ticket = new Ticket();
-      ticket.primaryKeyValue = user.id;
-      ticket.code = await this[generateCode]();
+      ticket.primaryKeyValue = code;
+      ticket.registered_by = user.id;
+      ticket.email = request.input('email');
       ticket.quantity = request.input('quantity');
 
       await ticket.save();
 
       return response.status(200).json({
-        message: 'Ticket created for: ' + user.email,
+        message: 'Ticket created for: ' + request.input('email'),
         data: ticket
       });
     } catch(error) {
+      console.log(error);
       return response.status(500).json({
         status: 'Error',
         message: 'Internal Server Error. Please check the logs.'
@@ -86,17 +100,9 @@ class TicketController {
   }
 
   async checkin({params, request, response}) {
-    const user = await User.find(params.id);
     const clientCode = request.input('code');
 
     // Checks if the user exists
-    if (!user) {
-      return response.status(400).json({
-        status: 'Error',
-        message: 'User does not exist.'
-      });
-    }
-
     if (!clientCode) {
       return response.status(400).json({
         status: 'Error',
@@ -105,33 +111,25 @@ class TicketController {
     }
 
     // Checks if the user has a ticket
-    const ticket = await Ticket.find(user.id);
+    const ticket = await Ticket.find(clientCode);
     if (!ticket) {
       return response.status(400).json({
         status: 'Error',
-        message: 'User does not have a ticket.'
-      });
-    }
-
-    // Checks if the client ticket code matches the server ticket code
-    if (request.input('code') != ticket.code) {
-      return response.status(400).json({
-        status: 'Error',
-        message: 'Ticket validation failed.'
+        message: 'Code does not exist'
       });
     }
 
     // Checks if the user is already checked in
-    if (ticket.checked_in) {
+    if (ticket.checked_in >= ticket.quantity) {
       return response.status(400).json({
         status: 'Error',
-        message: 'User already checked in.'
+        message: 'Ticket can no longer be used.'
       });
     }
 
     try {
-      // Sets ticket to checked in
-      ticket.checked_in = true;
+      // Adds number of checked in tickets
+      ticket.checked_in++;
       await ticket.save();
 
       // Returns the ticket

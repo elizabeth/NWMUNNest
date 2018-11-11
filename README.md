@@ -72,7 +72,7 @@ JWT Auth Token
     }
 }
 ```
-
+---
 ## Ticket _(JWT Authentication Required)_
 ### GET `/api/v1/ticket`
 Gets the current user's ticket. _(Will be Deprecated)_
@@ -94,24 +94,26 @@ Ticket object
 Creates a new ticket.
 #### Parameters
 * `quantity`: Quantity of tickets (required)
+* `email`: The email address being registered.
 
 #### Response
 Ticket Object
 #### Sample Response
 ```
 {
-    "message": "Ticket created for: email@email.com",
+    "message": "Ticket created for: email2@email.com",
     "data": {
-        "user_id": 1,
         "code": "$2a$10$F/uv96nv66pQaSBa5yhyku381kLBoX4jYnqSiq8kYrHWy0PuDa3O2",
-        "quantity": "1",
-        "created_at": "2018-10-25 08:28:21",
-        "updated_at": "2018-10-25 08:28:21"
+        "registered_by": 1,
+        "email": "email2@email.com",
+        "quantity": "2",
+        "created_at": "2018-11-10 21:40:04",
+        "updated_at": "2018-11-10 21:40:04"
     }
 }
 ```
 ---
-### PUT `/api/v1/ticket/:id/checkin`
+### PUT `/api/v1/ticket/checkin`
 Checks the user in.
 #### Parameters
 * `code`: User's ticket code
@@ -123,16 +125,16 @@ Ticket Object
 {
     "message": "User checked in.",
     "data": {
-        "user_id": 1,
         "code": "$2a$10$F/uv96nv66pQaSBa5yhyku381kLBoX4jYnqSiq8kYrHWy0PuDa3O2",
-        "quantity": 1,
-        "checked_in": true,
-        "created_at": "2018-10-25 08:28:21",
-        "updated_at": "2018-10-25 08:28:21"
+        "email": "email2@email.com",
+        "registered_by": 1,
+        "quantity": 2,
+        "checked_in": 1,
+        "created_at": "2018-11-10 21:40:04",
+        "updated_at": "2018-11-10 21:44:33"
     }
 }
 ```
-
 ---
 ---
 

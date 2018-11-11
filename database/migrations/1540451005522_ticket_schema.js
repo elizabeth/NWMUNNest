@@ -6,10 +6,11 @@ const Schema = use('Schema');
 class TicketSchema extends Schema {
   up () {
     this.create('tickets', (table) => {
-      table.integer('user_id').unsigned().references('id').inTable('users').unique();
-      table.string('code', 60).notNullable();
+      table.string('code', 60).notNullable().unique();
+      table.string('email', 254).notNullable().unique()
+      table.integer('registered_by').unsigned().references('id').inTable('users').unique();
       table.integer('quantity').notNullable();
-      table.boolean('checked_in').notNullable().defaultTo(0);
+      table.integer('checked_in').notNullable().defaultTo(0);
       table.timestamps()
     });
   }
