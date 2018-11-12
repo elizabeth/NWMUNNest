@@ -5,15 +5,18 @@ const Mail = use('Mail');
 const Hash = use('Hash');
 const QRCode = use('qrcode');
 const { validate } = use('Validator');
+const Database = use('Database');
 
 // Models
 const User = use('App/Models/User');
 const Ticket = use('App/Models/Ticket');
+const CheckedIn = use('App/Models/CheckedIn');
 
 // ES6 Private Methods
 const generateCode = Symbol('generateCode');
 const generateQR = Symbol('generateQR');
 const generateEmail = Symbol('generateEmail');
+const getCheckInLog = Symbol('getCheckInLog');
 
 class TicketController {
   // ES6 Symbolic Private Declaration
@@ -24,20 +27,25 @@ class TicketController {
   }
 
   async [generateQR](code) {
-      try {
-        return await QRCode.toDataURL(code);
-      } catch (err) {
-        console.error(err);
-        return null;
+    var opts = {
+      color: {
+        dark: "#323C67"
       }
+    };
+
+    try {
+      return await QRCode.toDataURL(code, opts);
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
   }
 
-  async [generateEmail](qr, email) {
+  async [generateEmail](qr, request) {
     try {
-      await Mail.send('emails.ticket', {}, (message) => {
+      await Mail.send('emails.ticket', {quantity: request.input('quantity')}, (message) => {
         message
-          .to(email)
-          .from('sg.seattle@nwmun.org')
+          .to(request.input('email'))
           .embed(qr, 'qrCode')
           .subject('[NWMUN-Seattle 2018] Social Ticket')
       })
@@ -45,6 +53,17 @@ class TicketController {
       console.log(err);
       return null;
     }
+  }
+
+  async [getCheckInLog](code) {
+    const rawCheckInLog = await Database.table('checked_ins').where('code', code);
+
+    const checkInLog = [];
+    rawCheckInLog.map((rawCheckIn) => {
+      checkInLog.push(rawCheckIn.created_at);
+    });
+
+    return checkInLog;
   }
 
   async get({request, response, auth}) {
@@ -124,7 +143,7 @@ class TicketController {
 
       await ticket.save();
 
-      await this[generateEmail](qr, request.input('email'));
+      await this[generateEmail](qr, request);
 
       return response.status(200).json({
         message: 'Ticket created for: ' + request.input('email'),
@@ -161,16 +180,27 @@ class TicketController {
 
     // Checks if the user is already checked in
     if (ticket.checked_in >= ticket.quantity) {
+      ticket.check_in_log = await this[getCheckInLog](clientCode);
       return response.status(400).json({
         status: 'Error',
-        message: 'Ticket can no longer be used.'
+        message: 'Ticket has reached the maximum number of check-ins.',
+        data: ticket
       });
     }
 
     try {
       // Adds number of checked in tickets
       ticket.checked_in++;
+
+      // Creates entry in CheckedIn
+      const checkIn = new CheckedIn();
+      checkIn.code = clientCode;
+
+      await checkIn.save();
       await ticket.save();
+
+      // Requeries CheckedIn for log
+      ticket.check_in_log = await this[getCheckInLog](clientCode);
 
       // Returns the ticket
       return response.status(201).json({
@@ -178,9 +208,10 @@ class TicketController {
         data: ticket
       })
     } catch(error) {
+      console.log(error);
       return response.status(500).json({
         status: 'Error',
-        message: 'Internal Server Error. Please check the logs.'
+        message: 'Internal Server Error. Please check the logs.',
       });
     }
   }

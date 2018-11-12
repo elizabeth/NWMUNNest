@@ -124,12 +124,35 @@ Ticket Object
     "message": "User checked in.",
     "data": {
         "code": "$2a$10$F/uv96nv66pQaSBa5yhyku381kLBoX4jYnqSiq8kYrHWy0PuDa3O2",
-        "email": "email2@email.com",
+        "email": "sg.seattle@nwmun.org",
         "registered_by": 1,
         "quantity": 2,
         "checked_in": 1,
-        "created_at": "2018-11-10 21:40:04",
-        "updated_at": "2018-11-10 21:44:33"
+        "created_at": "2018-11-11 22:56:02",
+        "updated_at": "2018-11-11 22:56:18",
+        "check_in_log": [
+            "2018-11-12T06:56:18.000Z"
+        ]
+    }
+}
+```
+#### Sample Error
+```
+{
+    "status": "Error",
+    "message": "Ticket has reached the maximum number of check-ins.",
+    "data": {
+        "code": "$2a$10$F/uv96nv66pQaSBa5yhyku381kLBoX4jYnqSiq8kYrHWy0PuDa3O2",
+        "email": "sg.seattle@nwmun.org",
+        "registered_by": 1,
+        "quantity": 2,
+        "checked_in": 2,
+        "created_at": "2018-11-11 22:56:02",
+        "updated_at": "2018-11-11 22:56:57",
+        "check_in_log": [
+            "2018-11-12T06:56:18.000Z",
+            "2018-11-12T06:56:57.000Z"
+        ]
     }
 }
 ```
