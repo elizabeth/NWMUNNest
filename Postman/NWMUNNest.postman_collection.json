@@ -137,7 +137,7 @@
 						}
 					]
 				},
-				"method": "PUT",
+				"method": "POST",
 				"header": [],
 				"body": {},
 				"url": {
@@ -161,7 +161,7 @@
 						}
 					]
 				},
-				"description": "### PUT `/api/v1/ticket/checkin`\nChecks the user in.\n#### Parameters\n* `code`: User's ticket code\n\n#### Response\nTicket Object\n#### Sample Response\n```\n{\n    \"message\": \"User checked in.\",\n    \"data\": {\n        \"code\": \"$2a$10$F/uv96nv66pQaSBa5yhyku381kLBoX4jYnqSiq8kYrHWy0PuDa3O2\",\n        \"email\": \"email2@email.com\",\n        \"registered_by\": 1,\n        \"quantity\": 2,\n        \"checked_in\": 1,\n        \"created_at\": \"2018-11-10 21:40:04\",\n        \"updated_at\": \"2018-11-10 21:44:33\"\n    }\n}\n```"
+				"description": "### POST `/api/v1/ticket/checkin`\nChecks the user in.\n#### Parameters\n* `code`: User's ticket code\n\n#### Response\nTicket Object\n#### Sample Response\n```\n{\n    \"message\": \"User checked in.\",\n    \"data\": {\n        \"code\": \"$2a$10$F/uv96nv66pQaSBa5yhyku381kLBoX4jYnqSiq8kYrHWy0PuDa3O2\",\n        \"email\": \"email2@email.com\",\n        \"registered_by\": 1,\n        \"quantity\": 2,\n        \"checked_in\": 1,\n        \"created_at\": \"2018-11-10 21:40:04\",\n        \"updated_at\": \"2018-11-10 21:44:33\"\n    }\n}\n```"
 			},
 			"response": []
 		}

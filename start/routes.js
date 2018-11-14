@@ -32,5 +32,5 @@ Route.group(() => {
 Route.group(() => {
   Route.get('ticket', 'TicketController.get');
   Route.post('ticket/generate', 'TicketController.generate');
-  Route.put('ticket/checkin', 'TicketController.checkin');
+  Route.post('ticket/checkin', 'TicketController.checkin');
 }).prefix(apiPrefix).middleware(['auth']);

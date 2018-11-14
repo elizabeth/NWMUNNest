@@ -111,7 +111,7 @@ Ticket Object
 }
 ```
 ---
-### PUT `/api/v1/ticket/checkin`
+### POST `/api/v1/ticket/checkin`
 Checks the user in.
 #### Parameters
 * `code`: User's ticket code
