@@ -1,0 +1,177 @@
+{
+	"info": {
+		"name": "NWMUNNest-Prod",
+		"_postman_id": "3b8a4ca1-2aaf-484c-90f5-d6f9a26d7c79",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "users/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://54.148.136.72/api/v1/users/register?email=email@email.com&password=password",
+					"protocol": "http",
+					"host": [
+						"54",
+						"148",
+						"136",
+						"72"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"register"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "email@email.com",
+							"equals": true
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"equals": true
+						}
+					]
+				},
+				"description": "### POST `/api/v1/users/register`\nCreates a new user.\n#### Parameters\n* `email`: An email address (required, unique)\n* `password`: Password in cleartext (required)\n\n#### Response\nJWT Auth Token\n#### Sample Response\n```\n{\n    \"message\": \"User email@email.com successfully registered.\",\n    \"data\": {\n        \"type\": \"bearer\",\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTU0MDQ4MDczMH0.Np5nWQyjZt1P_U0WpRyv-fpcopsOcE57lByECLwz2n0\",\n        \"refreshToken\": null\n    }\n}\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "users/authenticate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://54.148.136.72/api/v1/users/authenticate?email=email@email.com&password=password",
+					"protocol": "http",
+					"host": [
+						"54",
+						"148",
+						"136",
+						"72"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"authenticate"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "email@email.com",
+							"equals": true
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"equals": true
+						}
+					]
+				},
+				"description": "### POST `/api/v1/users/authenticate`\nCreates a new user.\n#### Parameters\n* `email`: An email address (required, unique)\n* `password`: Password in cleartext (required)\n\n#### Response\nJWT Auth Token\n#### Sample Response\n```\n{\n    \"data\": {\n        \"type\": \"bearer\",\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTU0MDQ4MTA1NH0.hFR-9sAfX1kIg5qRq-qiyrpgPIjm8gdJ_-3m7ANw4jI\",\n        \"refreshToken\": null\n    }\n}\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "ticket/generate",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTU0MjE4MTYxMn0.aZbQgjz2dNTLwSFcOLw6uMJ1HbWp7gdxH135Jxk-5cs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://54.148.136.72/api/v1/ticket/generate?quantity=2&email=sg.seattle@nwmun.org",
+					"protocol": "http",
+					"host": [
+						"54",
+						"148",
+						"136",
+						"72"
+					],
+					"path": [
+						"api",
+						"v1",
+						"ticket",
+						"generate"
+					],
+					"query": [
+						{
+							"key": "quantity",
+							"value": "2",
+							"equals": true
+						},
+						{
+							"key": "email",
+							"value": "sg.seattle@nwmun.org",
+							"equals": true
+						}
+					]
+				},
+				"description": "### POST `/api/v1/ticket/generate`\nCreates a new ticket.\n#### Parameters\n* `quantity`: Quantity of tickets (required)\n* `email`: The email address being registered.\n\n#### Response\nTicket Object\n#### Sample Response\n```\n{\n    \"message\": \"Ticket created for: email2@email.com\",\n    \"data\": {\n        \"code\": \"$2a$10$F/uv96nv66pQaSBa5yhyku381kLBoX4jYnqSiq8kYrHWy0PuDa3O2\",\n        \"registered_by\": 1,\n        \"email\": \"email2@email.com\",\n        \"quantity\": \"2\",\n        \"created_at\": \"2018-11-10 21:40:04\",\n        \"updated_at\": \"2018-11-10 21:40:04\"\n    }\n}\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "ticket/checkin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTU0MjAwMTYzOX0.Uale5HI6q_1BKXcRgBLT7v1hgJRc_aHZGLQ4M6ZQCgQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://54.148.136.72/api/v1/ticket/checkin?code={{CODE}}",
+					"protocol": "http",
+					"host": [
+						"54",
+						"148",
+						"136",
+						"72"
+					],
+					"path": [
+						"api",
+						"v1",
+						"ticket",
+						"checkin"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "{{CODE}}",
+							"equals": true
+						}
+					]
+				},
+				"description": "### PUT `/api/v1/ticket/checkin`\nChecks the user in.\n#### Parameters\n* `code`: User's ticket code\n\n#### Response\nTicket Object\n#### Sample Response\n```\n{\n    \"message\": \"User checked in.\",\n    \"data\": {\n        \"code\": \"$2a$10$F/uv96nv66pQaSBa5yhyku381kLBoX4jYnqSiq8kYrHWy0PuDa3O2\",\n        \"email\": \"email2@email.com\",\n        \"registered_by\": 1,\n        \"quantity\": 2,\n        \"checked_in\": 1,\n        \"created_at\": \"2018-11-10 21:40:04\",\n        \"updated_at\": \"2018-11-10 21:44:33\"\n    }\n}\n```"
+			},
+			"response": []
+		}
+	]
+}
