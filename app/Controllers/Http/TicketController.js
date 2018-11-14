@@ -101,7 +101,7 @@ class TicketController {
 
     const validation = await validate(request.all(), {
       quantity: 'required',
-      email: 'required|unique:tickets'
+      email: 'required'
     });
 
     if (validation.fails()) {

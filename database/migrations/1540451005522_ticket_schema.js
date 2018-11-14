@@ -7,8 +7,8 @@ class TicketSchema extends Schema {
   up () {
     this.create('tickets', (table) => {
       table.string('code', 60).notNullable().unique();
-      table.string('email', 254).notNullable().unique()
-      table.integer('registered_by').unsigned().references('id').inTable('users').unique();
+      table.string('email', 254).notNullable();
+      table.integer('registered_by').unsigned().references('id').inTable('users');
       table.integer('quantity').notNullable();
       table.integer('checked_in').notNullable().defaultTo(0);
       table.timestamps()
