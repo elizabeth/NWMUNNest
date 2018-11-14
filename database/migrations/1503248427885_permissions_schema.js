@@ -13,7 +13,7 @@ class PermissionsSchema extends Schema {
   }
 
   down () {
-    this.drop('permissions')
+    this.dropIfExists('permissions')
   }
 }
 

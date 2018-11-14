@@ -15,7 +15,7 @@ class UserSchema extends Schema {
   }
 
   down () {
-    this.drop('users')
+    this.dropIfExists('users')
   }
 }
 

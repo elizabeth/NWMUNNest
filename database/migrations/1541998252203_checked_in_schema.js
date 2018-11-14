@@ -13,7 +13,7 @@ class CheckedInSchema extends Schema {
   }
 
   down () {
-    this.drop('checked_ins')
+    this.dropIfExists('checked_ins')
   }
 }
 

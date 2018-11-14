@@ -16,7 +16,7 @@ class TicketSchema extends Schema {
   }
 
   down () {
-    this.drop('tickets')
+    this.dropIfExists('tickets')
   }
 }
 
