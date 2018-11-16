@@ -18,11 +18,13 @@ const generateQR = Symbol('generateQR');
 const generateEmail = Symbol('generateEmail');
 const getCheckInLog = Symbol('getCheckInLog');
 
+const HASH_SALT = "nwmunegg";
+
 class TicketController {
   // ES6 Symbolic Private Declaration
-  async [generateCode]() {
+  async [generateCode](email) {
     const currentDateTime = Math.round((new Date()).getTime() / 1000);
-    const hash = await Hash.make(currentDateTime.toString());
+    const hash = await Hash.make(currentDateTime.toString() + email + HASH_SALT);
     return hash.toString();
   }
 
@@ -109,7 +111,7 @@ class TicketController {
     }
 
     // Generate Code and QR
-    const code = await this[generateCode]();
+    const code = await this[generateCode](request.input('email'));
     if (!code) {
       return response.status(500).json({
         status: 'Error',
