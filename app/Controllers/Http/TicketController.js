@@ -205,7 +205,7 @@ class TicketController {
       ticket.check_in_log = await this[getCheckInLog](clientCode);
 
       // Returns the ticket
-      return response.status(201).json({
+      return response.status(200).json({
         message: 'User checked in.',
         data: ticket
       })
