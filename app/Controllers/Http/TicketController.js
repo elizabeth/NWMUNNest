@@ -45,11 +45,12 @@ class TicketController {
 
   async [generateEmail](qr, request) {
     try {
-      await Mail.send('emails.ticket', {quantity: request.input('quantity')}, (message) => {
+      await Mail.send('emails.ticket', {ticket_quantity: request.input('ticket_quantity'),
+        keg_quantity: request.input('keg_quantity')}, (message) => {
         message
           .to(request.input('email'))
           .embed(qr, 'qrCode')
-          .subject('[NWMUN-Seattle 2018] Social Ticket')
+          .subject('[NWMUN-Seattle 2019] Social Ticket')
       })
     } catch(err) {
       console.log(err);
@@ -101,8 +102,18 @@ class TicketController {
       });
     }
 
+    // Checks if `ticket_quantity_ and `keg_quantity` both == 0
+    if (request.input('ticket_quantity') == '0' && request.input('keg_quantity') === '0') {
+      console.log("QUANTITIES == 0");
+      return response.status(400).json({
+        status: 'Error',
+        message: 'Ticket quantity and keg quantity cannot both be 0.'
+      });
+    }
+
     const validation = await validate(request.all(), {
-      quantity: 'required',
+      ticket_quantity: 'required',
+      keg_quantity: 'required',
       email: 'required'
     });
 
@@ -141,7 +152,8 @@ class TicketController {
       ticket.primaryKeyValue = code;
       ticket.registered_by = user.id;
       ticket.email = request.input('email');
-      ticket.quantity = request.input('quantity');
+      ticket.ticket_quantity = request.input('ticket_quantity');
+      ticket.keg_quantity = request.input('keg_quantity');
 
       await ticket.save();
 
@@ -161,6 +173,9 @@ class TicketController {
   }
 
   async checkin({params, request, response}) {
+    // TODO: 1. Switch "checked_in" back to boolean
+    // TODO: 2. if(checked_in): Return quantities of tickets and keg_tickets
+    // TODO: 3. if(!checked_in): Return quantities of tickets and keg_tickets and update datetime stamp
     const clientCode = request.input('code');
 
     // Checks if the user exists
@@ -181,18 +196,18 @@ class TicketController {
     }
 
     // Checks if the user is already checked in
-    if (ticket.checked_in >= ticket.quantity) {
+    if (ticket.checked_in) {
       ticket.check_in_log = await this[getCheckInLog](clientCode);
       return response.status(202).json({
         status: 'Error',
-        message: 'Ticket has reached the maximum number of check-ins.',
+        message: 'Ticket has already been checked in.',
         data: ticket
       });
     }
 
     try {
       // Adds number of checked in tickets
-      ticket.checked_in++;
+      ticket.checked_in = true;
 
       // Creates entry in CheckedIn
       const checkIn = new CheckedIn();

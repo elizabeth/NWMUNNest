@@ -9,8 +9,9 @@ class TicketSchema extends Schema {
       table.string('code', 60).notNullable().unique();
       table.string('email', 254).notNullable();
       table.integer('registered_by').unsigned().references('id').inTable('users');
-      table.integer('quantity').notNullable();
-      table.integer('checked_in').notNullable().defaultTo(0);
+      table.integer('ticket_quantity').notNullable();
+      table.integer('keg_quantity').notNullable();
+      table.boolean('checked_in').defaultTo(false);
       table.timestamps()
     });
   }
