@@ -203,8 +203,13 @@ class TicketController {
 
     try {
       // Adds number of checked in tickets
-      ticket.checked_in++;
-      ticket.redeemed_keg_tickets = ticket.keg_quantity;
+      if (ticket.ticket_quantity > 0) {
+        ticket.checked_in++;
+      }
+
+      if (ticket.keg_quantity > 0) {
+        ticket.redeemed_keg_tickets = ticket.keg_quantity;
+      }
 
       // Creates entry in CheckedIn
       const checkIn = new CheckedIn();
@@ -220,6 +225,11 @@ class TicketController {
       if (ticket.ticket_quantity == 0) {
         return response.status(200).json({
           message: 'Tickets redeemed.',
+          data: ticket
+        });
+      } else if (ticket.redeemed_keg_tickets == 0) {
+        return response.status(200).json({
+          message: 'User checked in.',
           data: ticket
         });
       } else {
