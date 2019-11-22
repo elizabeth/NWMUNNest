@@ -217,10 +217,17 @@ class TicketController {
       ticket.check_in_log = await this[getCheckInLog](clientCode);
 
       // Returns the ticket
-      return response.status(200).json({
-        message: 'User checked in.',
-        data: ticket
-      })
+      if (ticket.ticket_quantity == 0) {
+        return response.status(200).json({
+          message: 'Tickets redeemed.',
+          data: ticket
+        });
+      } else {
+        return response.status(200).json({
+          message: 'User checked in and tickets redeemed.',
+          data: ticket
+        });
+      }
     } catch(error) {
       console.log(error);
       return response.status(500).json({
