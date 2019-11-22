@@ -141,13 +141,13 @@ Ticket Object
 ```
 {
     "status": "Error",
-    "message": "Ticket has already been checked in.",
+    "message": "Ticket has reached the maximum number of check-ins.",
     "data": {
         "code": "$2a$10$F/uv96nv66pQaSBa5yhyku381kLBoX4jYnqSiq8kYrHWy0PuDa3O2",
         "email": "sg.seattle@nwmun.org",
         "registered_by": 1,
         "quantity": 2,
-        "checked_in": 1,
+        "checked_in": 2,
         "created_at": "2018-11-11 22:56:02",
         "updated_at": "2018-11-11 22:56:57",
         "check_in_log": [

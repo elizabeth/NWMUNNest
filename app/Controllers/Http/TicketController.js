@@ -104,7 +104,6 @@ class TicketController {
 
     // Checks if `ticket_quantity_ and `keg_quantity` both == 0
     if (request.input('ticket_quantity') == '0' && request.input('keg_quantity') === '0') {
-      console.log("QUANTITIES == 0");
       return response.status(400).json({
         status: 'Error',
         message: 'Ticket quantity and keg quantity cannot both be 0.'
@@ -173,9 +172,6 @@ class TicketController {
   }
 
   async checkin({params, request, response}) {
-    // TODO: 1. Switch "checked_in" back to boolean
-    // TODO: 2. if(checked_in): Return quantities of tickets and keg_tickets
-    // TODO: 3. if(!checked_in): Return quantities of tickets and keg_tickets and update datetime stamp
     const clientCode = request.input('code');
 
     // Checks if the user exists
@@ -200,14 +196,14 @@ class TicketController {
       ticket.check_in_log = await this[getCheckInLog](clientCode);
       return response.status(202).json({
         status: 'Error',
-        message: 'Ticket has already been checked in.',
+        message: 'Ticket has reached the maximum number of check-ins.',
         data: ticket
       });
     }
 
     try {
       // Adds number of checked in tickets
-      ticket.checked_in = true;
+      ticket.checked_in++;
 
       // Creates entry in CheckedIn
       const checkIn = new CheckedIn();
