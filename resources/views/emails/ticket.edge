@@ -1,11 +1,8 @@
 <p>
-  Thank you for your purchase. The NWMUN-Seattle 2018 Delegate Social will take place on <b>Saturday, November 17th,
+  Thank you for your purchase. The NWMUN-Seattle 2019 Delegate Social will take place on <b>Saturday, November 23rd,
   beginning at 9 PM</b>. It will be held in the Madison Ballroom on the 2nd Floor and will feature DJ O'Please.
-  Admission to the social includes:
+  Admission to the social includes 1 Drink Ticket, usable for kegs, wine, or soft drinks.
 </p>
-  <ul>
-    <li>1 Drink Ticket, usable for kegs, wine, or soft drinks.</li>
-  </ul>
 
 <p>
   Bar staff will ID you, so please bring your ID if you intend to by alcoholic drinks. If you want additional drinks
@@ -21,37 +18,16 @@
   Alternatively, there is a cash bar for additional wine, soft drinks, or spirits.
 </p>
 
+Your purchase includes the following:
+<ul>
 @if(ticket_quantity > 0)
-<p>
-This is your ticket for the Delegate Social. It is good for
-@if(ticket_quantity == 1)
-  {{ticket_quantity}} use:
-@else
-  {{ticket_quantity}} uses:
+<li>{{ticket_quantity}} Entry Ticket(s)</li>
 @endif
-</p>
-@elseif(ticket_quantity > 0 && keg_quantity > 0)
-<p>
-This is your ticket, redeemable for
-@if(ticket_quantity == 1 && keg_quantity == 1)
-  {{ticket_quantity}} entry and {{keg_quantity}} keg ticket:
-@elseif(ticket_quantity > 1 && keg_quantity == 1)
-  {{ticket_quantity}} entries and {{keg_quantity}} keg ticket:
-@elseif(ticket_quantity == 1 && keg_quantity > 1)
-  {{ticket_quantity}} entry and {{keg_quantity}} keg tickets:
-@else
-  {{ticket_quantity}} entries and {{keg_quantity}} keg tickets:
+@if(keg_quantity > 0)
+<li>{{keg_quantity}} Keg Ticket(s)</li>
 @endif
-</p>
-@else
-@if(keg_quantity == 1)
-<p>
-This is your keg ticket for the Delegate Social. It is good for
-  {{keg_quantity}} use:
-@else
-  {{keg_quantity}} uses:
-@endif
-</p>
-@endif
+</ul>
+
+Please show the QR code for redemption:
 
 <img src="cid:qrCode" />
