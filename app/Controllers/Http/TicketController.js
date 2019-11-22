@@ -201,6 +201,16 @@ class TicketController {
       });
     }
 
+    // Checks if the keg tickets are redeemed
+    if (ticket.ticket_quantity == 0 && ticket.keg_quantity >= ticket.redeemed_keg_tickets) {
+      ticket.check_in_log = await this[getCheckInLog](clientCode);
+      return response.status(202).json({
+        status: 'Error',
+        message: 'Keg tickets have all been redeemed.',
+        data: ticket
+      });
+    }
+
     try {
       // Adds number of checked in tickets
       if (ticket.ticket_quantity > 0) {
@@ -224,7 +234,7 @@ class TicketController {
       // Returns the ticket
       if (ticket.ticket_quantity == 0) {
         return response.status(200).json({
-          message: 'Tickets redeemed.',
+          message: 'Keg tickets redeemed.',
           data: ticket
         });
       } else if (ticket.redeemed_keg_tickets == 0) {
@@ -234,7 +244,7 @@ class TicketController {
         });
       } else {
         return response.status(200).json({
-          message: 'User checked in and tickets redeemed.',
+          message: 'User checked in and keg tickets redeemed.',
           data: ticket
         });
       }
