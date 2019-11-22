@@ -192,7 +192,7 @@ class TicketController {
     }
 
     // Checks if the user is already checked in
-    if (ticket.checked_in) {
+    if (ticket.checked_in > ticket.ticket_quantity) {
       ticket.check_in_log = await this[getCheckInLog](clientCode);
       return response.status(202).json({
         status: 'Error',
