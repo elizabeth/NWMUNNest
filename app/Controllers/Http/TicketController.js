@@ -192,7 +192,7 @@ class TicketController {
     }
 
     // Checks if the user is already checked in
-    if (ticket.checked_in > ticket.ticket_quantity) {
+    if (ticket.checked_in >= ticket.ticket_quantity) {
       ticket.check_in_log = await this[getCheckInLog](clientCode);
       return response.status(202).json({
         status: 'Error',
@@ -204,6 +204,7 @@ class TicketController {
     try {
       // Adds number of checked in tickets
       ticket.checked_in++;
+      ticket.redeemed_keg_tickets = ticket.keg_quantity;
 
       // Creates entry in CheckedIn
       const checkIn = new CheckedIn();

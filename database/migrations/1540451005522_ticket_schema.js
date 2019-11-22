@@ -12,6 +12,7 @@ class TicketSchema extends Schema {
       table.integer('ticket_quantity').notNullable();
       table.integer('keg_quantity').notNullable();
       table.integer('checked_in').defaultTo(0);
+      table.integer('redeemed_keg_tickets').defaultTo(0);
       table.timestamps()
     });
   }
