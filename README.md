@@ -191,3 +191,55 @@ Run the following command to run startup migrations.
 ```js
 adonis migration:run
 ```
+
+---
+---
+# Production Setup
+
+## Upgrade OS
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt full-upgrade
+
+## Install NVM
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+bash install_nvm.sh
+source ~/.profile
+
+## Install Node v11.15.0
+nvm install 11.15.0
+nvm use 11.15.0
+
+## Install Apache-2
+sudo apt-get install apache2
+
+## Add Proxy
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod proxy_balancer
+sudo a2enmod lbmethod_byrequests
+sudo vim /etc/apache2/apache2.conf
+```
+	ProxyPass / http://localhost:3333/
+```
+sudo service apache2 restart
+
+## Install MySQL
+sudo apt-get install mysql-server
+
+## Update root MySQL password
+sudo mysql -u root
+```
+	ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$vbQ6ByugrajG6dP';
+	flush privileges;
+	exit;
+```
+
+## Clone repo
+git clone https://github.com/elizabeth/NWMUNNest.git
+
+## Install Repo
+npm install
+
+## Edit .env
+cp .env.example .env && vim .env
